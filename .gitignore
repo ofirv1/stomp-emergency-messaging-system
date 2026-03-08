@@ -1,0 +1,17 @@
+# VS Code
+.vscode/
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+*.iws
+
+# Java / Maven build output
+server/target/
+*.class
+*.log
+
+# C++ build output
+client/bin/
+*.o
+*.out
