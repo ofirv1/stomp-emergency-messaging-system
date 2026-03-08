@@ -57,16 +57,27 @@ The client runs **two threads**:
 - Multithreading
 - Maven (server build)
 - Makefile (client build)
-
 ---
 
+# Containerized Development Environment
+
+The project includes a **Dev Container configuration** that allows running the system in a preconfigured Linux environment using Docker and VS Code Dev Containers.
+
+This container provides all required dependencies for building and running both the server and the client.
+
+## Requirements
+
+- Docker
+- VS Code
+- VS Code Dev Containers extension
+---
 # Build Instructions
 
 ## Build the Server
 
 From the `server` directory:
 
-```
+```bash
 mvn compile
 ```
 
@@ -74,7 +85,7 @@ mvn compile
 
 From the `client` directory:
 
-```
+```bash
 make
 ```
 
@@ -84,15 +95,17 @@ make
 
 ## Start the Server
 
-Thread-Per-Client mode:
+From the `server` directory, run one of the following:
 
-```
+### Thread-Per-Client mode
+
+```bash
 mvn exec:java -Dexec.mainClass="bgu.spl.net.impl.stomp.StompServer" -Dexec.args="7777 tpc"
 ```
 
-Reactor mode:
+### Reactor mode
 
-```
+```bash
 mvn exec:java -Dexec.mainClass="bgu.spl.net.impl.stomp.StompServer" -Dexec.args="7777 reactor"
 ```
 
@@ -104,55 +117,57 @@ The server will start listening on the specified port.
 
 From the `client` directory:
 
+```bash
+./bin/StompWCIClient 127.0.0.1 7777
 ```
-./bin/StompEMIClient
-```
+
+The client expects the server host and port as command-line arguments.
 
 ---
 
 # Client Commands
 
-The client receives commands through the terminal.
+After starting the client, enter commands through the terminal.
 
-### Login
+## Login
 
-```
+```text
 login {host:port} {username} {password}
 ```
 
 Example:
 
-```
+```text
 login 127.0.0.1:7777 alice 1234
 ```
 
 ---
 
-### Join Emergency Channel
+## Join Emergency Channel
 
-```
+```text
 join {channel_name}
 ```
 
 Example:
 
-```
-join fire_dept
+```text
+join police
 ```
 
 ---
 
-### Exit Emergency Channel
+## Exit Emergency Channel
 
-```
+```text
 exit {channel_name}
 ```
 
 ---
 
-### Report Emergency Events
+## Report Emergency Events
 
-```
+```text
 report {events_file.json}
 ```
 
@@ -160,7 +175,7 @@ The client reads the JSON file, parses the emergency events, and sends each even
 
 Example:
 
-```
+```text
 report data/events1_partial.json
 ```
 
@@ -183,29 +198,31 @@ Each event is broadcast by the server to all subscribers of the corresponding ch
 
 ---
 
-### Generate Summary
+## Generate Summary
 
-```
+```text
 summary {channel_name} {user} {output_file}
 ```
 
 Example:
 
-```
+```text
 summary police alice summary.txt
 ```
 
-This command generates a summary file containing all emergency updates received from the specified user in the specified channel.
+This command generates a summary file containing emergency updates received from the specified user in the specified channel.
 
 ---
 
-### Logout
+## Logout
 
-```
+```text
 logout
 ```
 
-The client sends a `DISCONNECT` frame and closes the connection gracefully after receiving a receipt from the server.
+The client sends a `DISCONNECT` frame and closes the connection gracefully.
+
+
 
 ---
 
